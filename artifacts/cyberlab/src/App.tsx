@@ -24,6 +24,7 @@ import Employees from "@/pages/employees";
 import ApiKeys from "@/pages/api-keys";
 import AuditLogs from "@/pages/audit-logs";
 import ApiDocs from "@/pages/api-docs";
+import Scanner from "@/pages/scanner";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ function ProtectedRouter() {
         <Route path="/api-keys" component={ApiKeys} />
         <Route path="/audit-logs" component={AuditLogs} />
         <Route path="/api-docs" component={ApiDocs} />
+        <Route path="/scanner" component={Scanner} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

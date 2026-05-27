@@ -30,6 +30,7 @@ import {
   Users,
   Bell,
   Terminal,
+  Bug,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -44,6 +45,7 @@ const NAV_ITEMS = [
   { href: "/employees", label: "Employees", icon: User },
   { href: "/api-keys", label: "API Keys", icon: Key },
   { href: "/audit-logs", label: "Audit Logs", icon: Activity },
+  { href: "/scanner", label: "Scanner", icon: Bug },
   { href: "/api-docs", label: "API Docs", icon: BookOpen },
 ];
 

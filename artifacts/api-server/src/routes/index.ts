@@ -13,6 +13,7 @@ import employeesRouter from "./employees";
 import apiKeysRouter from "./apiKeys";
 import auditLogsRouter from "./auditLogs";
 import analyticsRouter from "./analytics";
+import scannerRouter from "./scanner";
 
 const router: IRouter = Router();
 
@@ -30,5 +31,6 @@ router.use(employeesRouter);
 router.use(apiKeysRouter);
 router.use(auditLogsRouter);
 router.use(analyticsRouter);
+router.use(scannerRouter);
 
 export default router;

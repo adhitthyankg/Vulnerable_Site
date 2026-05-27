@@ -693,6 +693,145 @@ export const DeleteApiKeyParams = zod.object({
 
 
 /**
+ * @summary List all vulnerability findings
+ */
+export const ListFindingsQueryParams = zod.object({
+  "severity": zod.coerce.string().optional(),
+  "status": zod.coerce.string().optional(),
+  "category": zod.coerce.string().optional()
+})
+
+export const ListFindingsResponseItem = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "category": zod.string(),
+  "severity": zod.string(),
+  "status": zod.string(),
+  "description": zod.string(),
+  "affectedEndpoint": zod.string(),
+  "cweId": zod.string().nullish(),
+  "cvssScore": zod.number().nullish(),
+  "evidence": zod.string().nullish(),
+  "remediation": zod.string().nullish(),
+  "userId": zod.number(),
+  "reportedBy": zod.string().optional(),
+  "createdAt": zod.string(),
+  "updatedAt": zod.string().nullish()
+})
+export const ListFindingsResponse = zod.array(ListFindingsResponseItem)
+
+
+/**
+ * @summary Report a new finding
+ */
+export const CreateFindingBody = zod.object({
+  "title": zod.string(),
+  "category": zod.string(),
+  "severity": zod.string(),
+  "description": zod.string(),
+  "affectedEndpoint": zod.string(),
+  "cweId": zod.string().optional(),
+  "cvssScore": zod.number().optional(),
+  "evidence": zod.string().optional(),
+  "remediation": zod.string().optional()
+})
+
+
+/**
+ * @summary Get finding by ID
+ */
+export const GetFindingParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const GetFindingResponse = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "category": zod.string(),
+  "severity": zod.string(),
+  "status": zod.string(),
+  "description": zod.string(),
+  "affectedEndpoint": zod.string(),
+  "cweId": zod.string().nullish(),
+  "cvssScore": zod.number().nullish(),
+  "evidence": zod.string().nullish(),
+  "remediation": zod.string().nullish(),
+  "userId": zod.number(),
+  "reportedBy": zod.string().optional(),
+  "createdAt": zod.string(),
+  "updatedAt": zod.string().nullish()
+})
+
+
+/**
+ * @summary Update a finding (status, evidence, remediation)
+ */
+export const UpdateFindingParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateFindingBody = zod.object({
+  "title": zod.string().optional(),
+  "category": zod.string().optional(),
+  "severity": zod.string().optional(),
+  "status": zod.string().optional(),
+  "description": zod.string().optional(),
+  "affectedEndpoint": zod.string().optional(),
+  "cweId": zod.string().optional(),
+  "cvssScore": zod.number().optional(),
+  "evidence": zod.string().optional(),
+  "remediation": zod.string().optional()
+})
+
+export const UpdateFindingResponse = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "category": zod.string(),
+  "severity": zod.string(),
+  "status": zod.string(),
+  "description": zod.string(),
+  "affectedEndpoint": zod.string(),
+  "cweId": zod.string().nullish(),
+  "cvssScore": zod.number().nullish(),
+  "evidence": zod.string().nullish(),
+  "remediation": zod.string().nullish(),
+  "userId": zod.number(),
+  "reportedBy": zod.string().optional(),
+  "createdAt": zod.string(),
+  "updatedAt": zod.string().nullish()
+})
+
+
+/**
+ * @summary Delete a finding
+ */
+export const DeleteFindingParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+
+/**
+ * @summary Get scanner dashboard summary
+ */
+export const GetScannerSummaryResponse = zod.object({
+  "totalFindings": zod.number(),
+  "criticalCount": zod.number(),
+  "highCount": zod.number(),
+  "mediumCount": zod.number(),
+  "lowCount": zod.number(),
+  "openCount": zod.number(),
+  "confirmedCount": zod.number(),
+  "falsePositiveCount": zod.number(),
+  "owaspCoverage": zod.array(zod.object({
+  "category": zod.string(),
+  "found": zod.number(),
+  "total": zod.number(),
+  "percentage": zod.number()
+}))
+})
+
+
+/**
  * @summary List audit logs
  */
 export const ListAuditLogsQueryParams = zod.object({

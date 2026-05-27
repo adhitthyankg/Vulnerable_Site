@@ -31,10 +31,14 @@ import type {
   Employee,
   EmployeeInput,
   EmployeeUpdate,
+  Finding,
+  FindingInput,
+  FindingUpdate,
   HealthStatus,
   ListAuditLogsParams,
   ListCommentsParams,
   ListEmployeesParams,
+  ListFindingsParams,
   ListPostsParams,
   ListProductsParams,
   LoginInput,
@@ -50,6 +54,7 @@ import type {
   ProductInput,
   ProductUpdate,
   RegisterInput,
+  ScannerSummary,
   Ticket,
   TicketInput,
   TicketUpdate,
@@ -3188,6 +3193,457 @@ export const useDeleteApiKey = <TError = ErrorType<unknown>,
       > => {
       return useMutation(getDeleteApiKeyMutationOptions(options));
     }
+
+export const getListFindingsUrl = (params?: ListFindingsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/findings?${stringifiedParams}` : `/api/findings`
+}
+
+/**
+ * @summary List all vulnerability findings
+ */
+export const listFindings = async (params?: ListFindingsParams, options?: RequestInit): Promise<Finding[]> => {
+
+  return customFetch<Finding[]>(getListFindingsUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListFindingsQueryKey = (params?: ListFindingsParams,) => {
+    return [
+    `/api/findings`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getListFindingsQueryOptions = <TData = Awaited<ReturnType<typeof listFindings>>, TError = ErrorType<unknown>>(params?: ListFindingsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listFindings>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListFindingsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listFindings>>> = ({ signal }) => listFindings(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listFindings>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListFindingsQueryResult = NonNullable<Awaited<ReturnType<typeof listFindings>>>
+export type ListFindingsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all vulnerability findings
+ */
+
+export function useListFindings<TData = Awaited<ReturnType<typeof listFindings>>, TError = ErrorType<unknown>>(
+ params?: ListFindingsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listFindings>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListFindingsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getCreateFindingUrl = () => {
+
+
+
+
+  return `/api/findings`
+}
+
+/**
+ * @summary Report a new finding
+ */
+export const createFinding = async (findingInput: FindingInput, options?: RequestInit): Promise<Finding> => {
+
+  return customFetch<Finding>(getCreateFindingUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      findingInput,)
+  }
+);}
+
+
+
+
+export const getCreateFindingMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFinding>>, TError,{data: BodyType<FindingInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createFinding>>, TError,{data: BodyType<FindingInput>}, TContext> => {
+
+const mutationKey = ['createFinding'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createFinding>>, {data: BodyType<FindingInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createFinding(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateFindingMutationResult = NonNullable<Awaited<ReturnType<typeof createFinding>>>
+    export type CreateFindingMutationBody = BodyType<FindingInput>
+    export type CreateFindingMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Report a new finding
+ */
+export const useCreateFinding = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFinding>>, TError,{data: BodyType<FindingInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createFinding>>,
+        TError,
+        {data: BodyType<FindingInput>},
+        TContext
+      > => {
+      return useMutation(getCreateFindingMutationOptions(options));
+    }
+
+export const getGetFindingUrl = (id: number,) => {
+
+
+
+
+  return `/api/findings/${id}`
+}
+
+/**
+ * @summary Get finding by ID
+ */
+export const getFinding = async (id: number, options?: RequestInit): Promise<Finding> => {
+
+  return customFetch<Finding>(getGetFindingUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetFindingQueryKey = (id: number,) => {
+    return [
+    `/api/findings/${id}`
+    ] as const;
+    }
+
+
+export const getGetFindingQueryOptions = <TData = Awaited<ReturnType<typeof getFinding>>, TError = ErrorType<unknown>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFinding>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFindingQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFinding>>> = ({ signal }) => getFinding(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFinding>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetFindingQueryResult = NonNullable<Awaited<ReturnType<typeof getFinding>>>
+export type GetFindingQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get finding by ID
+ */
+
+export function useGetFinding<TData = Awaited<ReturnType<typeof getFinding>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getFinding>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetFindingQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getUpdateFindingUrl = (id: number,) => {
+
+
+
+
+  return `/api/findings/${id}`
+}
+
+/**
+ * @summary Update a finding (status, evidence, remediation)
+ */
+export const updateFinding = async (id: number,
+    findingUpdate: FindingUpdate, options?: RequestInit): Promise<Finding> => {
+
+  return customFetch<Finding>(getUpdateFindingUrl(id),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      findingUpdate,)
+  }
+);}
+
+
+
+
+export const getUpdateFindingMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFinding>>, TError,{id: number;data: BodyType<FindingUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateFinding>>, TError,{id: number;data: BodyType<FindingUpdate>}, TContext> => {
+
+const mutationKey = ['updateFinding'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateFinding>>, {id: number;data: BodyType<FindingUpdate>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateFinding(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateFindingMutationResult = NonNullable<Awaited<ReturnType<typeof updateFinding>>>
+    export type UpdateFindingMutationBody = BodyType<FindingUpdate>
+    export type UpdateFindingMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Update a finding (status, evidence, remediation)
+ */
+export const useUpdateFinding = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFinding>>, TError,{id: number;data: BodyType<FindingUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateFinding>>,
+        TError,
+        {id: number;data: BodyType<FindingUpdate>},
+        TContext
+      > => {
+      return useMutation(getUpdateFindingMutationOptions(options));
+    }
+
+export const getDeleteFindingUrl = (id: number,) => {
+
+
+
+
+  return `/api/findings/${id}`
+}
+
+/**
+ * @summary Delete a finding
+ */
+export const deleteFinding = async (id: number, options?: RequestInit): Promise<void> => {
+
+  return customFetch<void>(getDeleteFindingUrl(id),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+export const getDeleteFindingMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFinding>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteFinding>>, TError,{id: number}, TContext> => {
+
+const mutationKey = ['deleteFinding'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFinding>>, {id: number}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteFinding(id,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteFindingMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFinding>>>
+
+    export type DeleteFindingMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Delete a finding
+ */
+export const useDeleteFinding = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFinding>>, TError,{id: number}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof deleteFinding>>,
+        TError,
+        {id: number},
+        TContext
+      > => {
+      return useMutation(getDeleteFindingMutationOptions(options));
+    }
+
+export const getGetScannerSummaryUrl = () => {
+
+
+
+
+  return `/api/scanner/summary`
+}
+
+/**
+ * @summary Get scanner dashboard summary
+ */
+export const getScannerSummary = async ( options?: RequestInit): Promise<ScannerSummary> => {
+
+  return customFetch<ScannerSummary>(getGetScannerSummaryUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetScannerSummaryQueryKey = () => {
+    return [
+    `/api/scanner/summary`
+    ] as const;
+    }
+
+
+export const getGetScannerSummaryQueryOptions = <TData = Awaited<ReturnType<typeof getScannerSummary>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getScannerSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetScannerSummaryQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getScannerSummary>>> = ({ signal }) => getScannerSummary({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getScannerSummary>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetScannerSummaryQueryResult = NonNullable<Awaited<ReturnType<typeof getScannerSummary>>>
+export type GetScannerSummaryQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get scanner dashboard summary
+ */
+
+export function useGetScannerSummary<TData = Awaited<ReturnType<typeof getScannerSummary>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getScannerSummary>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetScannerSummaryQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
 
 export const getListAuditLogsUrl = (params?: ListAuditLogsParams,) => {
   const normalizedParams = new URLSearchParams();

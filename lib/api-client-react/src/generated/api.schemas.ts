@@ -298,6 +298,73 @@ export interface UserStat {
   count: number;
 }
 
+export interface Finding {
+  id: number;
+  title: string;
+  category: string;
+  severity: string;
+  status: string;
+  description: string;
+  affectedEndpoint: string;
+  /** @nullable */
+  cweId?: string | null;
+  /** @nullable */
+  cvssScore?: number | null;
+  /** @nullable */
+  evidence?: string | null;
+  /** @nullable */
+  remediation?: string | null;
+  userId: number;
+  reportedBy?: string;
+  createdAt: string;
+  /** @nullable */
+  updatedAt?: string | null;
+}
+
+export interface FindingInput {
+  title: string;
+  category: string;
+  severity: string;
+  description: string;
+  affectedEndpoint: string;
+  cweId?: string;
+  cvssScore?: number;
+  evidence?: string;
+  remediation?: string;
+}
+
+export interface FindingUpdate {
+  title?: string;
+  category?: string;
+  severity?: string;
+  status?: string;
+  description?: string;
+  affectedEndpoint?: string;
+  cweId?: string;
+  cvssScore?: number;
+  evidence?: string;
+  remediation?: string;
+}
+
+export interface OwaspCoverageItem {
+  category: string;
+  found: number;
+  total: number;
+  percentage: number;
+}
+
+export interface ScannerSummary {
+  totalFindings: number;
+  criticalCount: number;
+  highCount: number;
+  mediumCount: number;
+  lowCount: number;
+  openCount: number;
+  confirmedCount: number;
+  falsePositiveCount: number;
+  owaspCoverage: OwaspCoverageItem[];
+}
+
 export type ListProductsParams = {
 search?: string;
 category?: string;
@@ -315,6 +382,12 @@ postId?: number;
 export type ListEmployeesParams = {
 search?: string;
 department?: string;
+};
+
+export type ListFindingsParams = {
+severity?: string;
+status?: string;
+category?: string;
 };
 
 export type ListAuditLogsParams = {

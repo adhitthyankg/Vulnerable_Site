@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetAnalyticsSummary, useGetRecentActivity, useGetVulnerabilityStats, useGetUserStats } from "@workspace/api-client-react";
 import { Users, ShoppingCart, DollarSign, Ticket as TicketIcon, FileText, Upload as UploadIcon, User as UserIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ActivityItem } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { ActivityItem } from "@workspace/api-client-react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar } from "recharts";
 
 function StatCard({ title, value, icon: Icon, loading }: { title: string, value?: number, icon: any, loading: boolean }) {

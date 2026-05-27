@@ -36,6 +36,8 @@ tags:
     description: API key management
   - name: audit
     description: Audit logs
+  - name: scanner
+    description: Security scanner and findings
 
 paths:
   /healthz:
@@ -801,6 +803,120 @@ paths:
         "204":
           description: Deleted
 
+  # SECURITY SCANNER / FINDINGS
+  /findings:
+    get:
+      operationId: listFindings
+      tags: [scanner]
+      summary: List all vulnerability findings
+      parameters:
+        - name: severity
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Findings list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Finding"
+    post:
+      operationId: createFinding
+      tags: [scanner]
+      summary: Report a new finding
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FindingInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Finding"
+
+  /findings/{id}:
+    get:
+      operationId: getFinding
+      tags: [scanner]
+      summary: Get finding by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Finding
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Finding"
+    patch:
+      operationId: updateFinding
+      tags: [scanner]
+      summary: Update a finding (status, evidence, remediation)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FindingUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Finding"
+    delete:
+      operationId: deleteFinding
+      tags: [scanner]
+      summary: Delete a finding
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /scanner/summary:
+    get:
+      operationId: getScannerSummary
+      tags: [scanner]
+      summary: Get scanner dashboard summary
+      responses:
+        "200":
+          description: Summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScannerSummary"
+
   # AUDIT LOGS
   /audit-logs:
     get:
@@ -1421,3 +1537,123 @@ components:
           type: string
         count:
           type: integer
+
+    Finding:
+      type: object
+      required: [id, title, category, severity, status, description, affectedEndpoint, userId, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        severity:
+          type: string
+        status:
+          type: string
+        description:
+          type: string
+        affectedEndpoint:
+          type: string
+        cweId:
+          type: ["string", "null"]
+        cvssScore:
+          type: ["number", "null"]
+        evidence:
+          type: ["string", "null"]
+        remediation:
+          type: ["string", "null"]
+        userId:
+          type: integer
+        reportedBy:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: ["string", "null"]
+
+    FindingInput:
+      type: object
+      required: [title, category, severity, description, affectedEndpoint]
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        severity:
+          type: string
+        description:
+          type: string
+        affectedEndpoint:
+          type: string
+        cweId:
+          type: string
+        cvssScore:
+          type: number
+        evidence:
+          type: string
+        remediation:
+          type: string
+
+    FindingUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        category:
+          type: string
+        severity:
+          type: string
+        status:
+          type: string
+        description:
+          type: string
+        affectedEndpoint:
+          type: string
+        cweId:
+          type: string
+        cvssScore:
+          type: number
+        evidence:
+          type: string
+        remediation:
+          type: string
+
+    ScannerSummary:
+      type: object
+      required: [totalFindings, criticalCount, highCount, mediumCount, lowCount, openCount, confirmedCount, falsePositiveCount, owaspCoverage]
+      properties:
+        totalFindings:
+          type: integer
+        criticalCount:
+          type: integer
+        highCount:
+          type: integer
+        mediumCount:
+          type: integer
+        lowCount:
+          type: integer
+        openCount:
+          type: integer
+        confirmedCount:
+          type: integer
+        falsePositiveCount:
+          type: integer
+        owaspCoverage:
+          type: array
+          items:
+            $ref: "#/components/schemas/OwaspCoverageItem"
+
+    OwaspCoverageItem:
+      type: object
+      required: [category, found, total, percentage]
+      properties:
+        category:
+          type: string
+        found:
+          type: integer
+        total:
+          type: integer
+        percentage:
+          type: number
