@@ -1,10 +1,11 @@
-# [Project name]
+# CyberLab Training Platform
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A hands-on cybersecurity training lab modeled after OWASP Juice Shop / DVWA. Students log in and interact with a realistic enterprise-style application containing intentionally vulnerable code patterns for educational analysis and defensive remediation practice.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/api-server run dev` — run the API server (port 8080)
+- `pnpm --filter @workspace/cyberlab run dev` — run the React frontend
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
@@ -14,31 +15,54 @@ _Replace the heading above with the project's name, and this line with one sente
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
+- Frontend: React + Vite + Tailwind CSS + shadcn/ui + Wouter
 - API: Express 5
 - DB: PostgreSQL + Drizzle ORM
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
 
+## Demo Training Credentials
+
+| Username | Password | Role |
+|---|---|---|
+| admin | admin123 | admin |
+| test | test123 | user |
+| analyst | password123 | analyst |
+
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `lib/api-spec/openapi.yaml` — OpenAPI source of truth
+- `lib/db/src/schema/` — Drizzle table definitions (users, products, orders, posts, comments, tickets, uploads, notifications, employees, apiKeys, auditLogs)
+- `artifacts/api-server/src/routes/` — Express route handlers
+- `artifacts/cyberlab/src/` — React frontend
+- `artifacts/cyberlab/src/pages/` — All application pages
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Auth uses base64-encoded JSON "tokens" (intentionally weak — educational).  Real apps use signed JWTs.
+- Passwords hashed with unsalted SHA-256 (intentionally insecure for training). Real apps use bcrypt/argon2.
+- Role accepted from registration body (mass assignment vulnerability, intentional). Real apps derive role server-side only.
+- No ownership checks on most endpoints — IDOR vulnerabilities are intentional training scenarios.
+- Inline educational comments throughout route handlers explain each vulnerability, its CWE classification, and the secure remediation.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Login/Register with demo training accounts
+- Admin dashboard with analytics, vulnerability stats charts, and activity feeds
+- Full CRUD: Users, Products, Orders, Blog Posts, Comments, Tickets, Uploads, Notifications, Employees, API Keys
+- Audit log viewer showing IP addresses and user actions
+- API documentation page
+- Each vulnerable pattern includes inline `// EDUCATIONAL NOTE:` comments with CWE reference, risk explanation, and secure coding recommendation
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+_Populate as needed._
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- After adding new DB schema files, always run `pnpm run typecheck:libs` to rebuild declarations before the API server will see them.
+- Run `pnpm --filter @workspace/api-spec run codegen` after any OpenAPI spec change before using new hooks.
 
 ## Pointers
 

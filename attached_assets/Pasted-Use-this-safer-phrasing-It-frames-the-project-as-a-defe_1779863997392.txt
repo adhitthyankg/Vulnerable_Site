@@ -1,0 +1,191 @@
+Use this safer phrasing. It frames the project as a defensive cybersecurity training lab instead of a “malicious vulnerable website generator,” which reduces refusal chances while still giving you what you need for practice.
+
+---
+
+# Rephrased Prompt for Anti Gravity AI
+
+Create a local-only cybersecurity training lab web application for defensive security education, secure coding awareness, and authorized penetration testing practice.
+
+The project should simulate a realistic enterprise-style web platform that security students can use to learn:
+
+* Web application security testing
+* Secure coding concepts
+* Vulnerability identification
+* Risk analysis
+* Defensive remediation
+* HTTP request analysis using tools like Burp Suite
+* OWASP Top 10 learning exercises
+* API security assessment
+* Authentication and session management analysis
+
+The environment must run completely offline inside Docker containers and be clearly marked as:
+
+“FOR LOCAL SECURITY TRAINING PURPOSES ONLY.”
+
+---
+
+## Application Requirements
+
+Build a realistic full-stack application containing:
+
+* User authentication
+* Role-based access system
+* Admin dashboard
+* REST APIs
+* Search functionality
+* File upload module
+* Blog/forum system
+* Ticketing/helpdesk module
+* Shopping/cart simulation
+* Analytics dashboard
+* Notification system
+* Internal employee portal
+* API documentation page
+
+Technology stack:
+
+Frontend:
+
+* React
+* Tailwind CSS
+
+Backend:
+
+* Node.js
+* Express.js
+
+Database:
+
+* MySQL
+
+Infrastructure:
+
+* Docker Compose
+
+Authentication:
+
+* JWT
+* Session cookies
+
+---
+
+## Security Training Scenarios
+
+The platform should contain intentionally insecure coding patterns for educational analysis and remediation exercises.
+
+Include examples related to:
+
+* Input validation failures
+* Authentication weaknesses
+* Session management issues
+* Access control mistakes
+* Unsafe database query handling
+* Insecure file validation
+* API authorization flaws
+* Misconfigured CORS policies
+* Sensitive data exposure
+* Logging and debug exposure
+* Insecure direct object references
+* CSRF protection gaps
+* Cross-site scripting examples
+* XML parser misconfiguration
+* SSRF-style URL validation weaknesses
+* Business logic abuse scenarios
+
+Each issue should include:
+
+* Inline educational comments
+* Explanation of the risk
+* Secure coding recommendation
+* Defensive remediation example
+
+---
+
+## Database Requirements
+
+Create a seeded MySQL database containing:
+
+Tables:
+
+* users
+* admins
+* sessions
+* products
+* orders
+* comments
+* tickets
+* uploads
+* notifications
+* audit_logs
+* employees
+* api_keys
+
+Include sample training accounts such as:
+
+* admin/admin123
+* test/test123
+* analyst/password123
+
+Use fictional data only.
+
+---
+
+## Docker Requirements
+
+Provide:
+
+* docker-compose.yml
+* Separate frontend/backend/database containers
+* phpMyAdmin container
+* Environment variable configuration
+* Setup instructions
+
+Ports:
+
+* Frontend: 3000
+* Backend: 5000
+* MySQL: 3306
+* phpMyAdmin: 8080
+
+---
+
+## Learning Features
+
+Include:
+
+* HTTP requests suitable for interception practice
+* Multi-step authentication flows
+* JWT token analysis exercises
+* API testing scenarios
+* Multipart upload requests
+* WebSocket traffic examples
+* Hidden developer endpoints
+* robots.txt examples
+* Debug logging examples
+* Swagger/OpenAPI documentation
+
+---
+
+## Educational Deliverables
+
+Generate:
+
+1. Full source code
+2. Docker setup
+3. Database schema
+4. SQL seed file
+5. Setup guide
+6. Security training guide
+7. Secure coding explanations
+8. Defensive remediation notes
+9. API documentation
+10. Testing walkthroughs for learners
+
+The final application should function as a hands-on cybersecurity learning platform similar to:
+
+* OWASP projects
+* OWASP Juice Shop
+* DVWA
+* WebGoat
+
+while remaining focused on defensive security education and local lab usage only.
