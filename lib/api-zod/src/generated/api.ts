@@ -693,6 +693,86 @@ export const DeleteApiKeyParams = zod.object({
 
 
 /**
+ * @summary List all training challenges
+ */
+export const ListChallengesResponseItem = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "category": zod.string(),
+  "difficulty": zod.string(),
+  "points": zod.number(),
+  "description": zod.string(),
+  "completed": zod.boolean(),
+  "completedAt": zod.string().nullish(),
+  "solvedCount": zod.number(),
+  "totalAttempts": zod.number().optional()
+})
+export const ListChallengesResponse = zod.array(ListChallengesResponseItem)
+
+
+/**
+ * @summary Get a single challenge with hints and objectives
+ */
+export const GetChallengeParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const GetChallengeResponse = zod.object({
+  "id": zod.number(),
+  "title": zod.string(),
+  "category": zod.string(),
+  "difficulty": zod.string(),
+  "points": zod.number(),
+  "description": zod.string(),
+  "objectives": zod.array(zod.string()),
+  "hints": zod.array(zod.object({
+  "order": zod.number(),
+  "text": zod.string(),
+  "penaltyPoints": zod.number()
+})),
+  "completed": zod.boolean(),
+  "completedAt": zod.string().nullish(),
+  "solvedCount": zod.number(),
+  "totalAttempts": zod.number().optional()
+})
+
+
+/**
+ * @summary Submit a flag answer for a challenge
+ */
+export const SubmitFlagParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const SubmitFlagBody = zod.object({
+  "flag": zod.string()
+})
+
+export const SubmitFlagResponse = zod.object({
+  "correct": zod.boolean(),
+  "message": zod.string(),
+  "pointsEarned": zod.number().nullish(),
+  "totalPoints": zod.number().nullish()
+})
+
+
+/**
+ * @summary Get current user's challenge progress summary
+ */
+export const GetMyProgressResponse = zod.object({
+  "totalPoints": zod.number(),
+  "completedCount": zod.number(),
+  "totalChallenges": zod.number(),
+  "rank": zod.string(),
+  "completions": zod.array(zod.object({
+  "challengeId": zod.number(),
+  "completedAt": zod.string(),
+  "pointsEarned": zod.number()
+}))
+})
+
+
+/**
  * @summary List all vulnerability findings
  */
 export const ListFindingsQueryParams = zod.object({

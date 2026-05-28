@@ -31,6 +31,7 @@ import {
   Bell,
   Terminal,
   Bug,
+  Trophy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -46,6 +47,7 @@ const NAV_ITEMS = [
   { href: "/api-keys", label: "API Keys", icon: Key },
   { href: "/audit-logs", label: "Audit Logs", icon: Activity },
   { href: "/scanner", label: "Scanner", icon: Bug },
+  { href: "/challenges", label: "Challenges", icon: Trophy },
   { href: "/api-docs", label: "API Docs", icon: BookOpen },
 ];
 

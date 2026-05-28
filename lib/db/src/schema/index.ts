@@ -10,3 +10,4 @@ export * from "./employees";
 export * from "./apiKeys";
 export * from "./auditLogs";
 export * from "./findings";
+export * from "./challenges";

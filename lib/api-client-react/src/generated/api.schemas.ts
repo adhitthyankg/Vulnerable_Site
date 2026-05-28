@@ -365,6 +365,69 @@ export interface ScannerSummary {
   owaspCoverage: OwaspCoverageItem[];
 }
 
+export interface Challenge {
+  id: number;
+  title: string;
+  category: string;
+  difficulty: string;
+  points: number;
+  description: string;
+  completed: boolean;
+  /** @nullable */
+  completedAt?: string | null;
+  solvedCount: number;
+  totalAttempts?: number;
+}
+
+export interface ChallengeHint {
+  order: number;
+  text: string;
+  penaltyPoints: number;
+}
+
+export interface ChallengeDetail {
+  id: number;
+  title: string;
+  category: string;
+  difficulty: string;
+  points: number;
+  description: string;
+  objectives: string[];
+  hints: ChallengeHint[];
+  completed: boolean;
+  /** @nullable */
+  completedAt?: string | null;
+  solvedCount: number;
+  totalAttempts?: number;
+}
+
+export interface FlagSubmission {
+  flag: string;
+}
+
+export interface FlagSubmitResult {
+  correct: boolean;
+  message: string;
+  /** @nullable */
+  pointsEarned?: number | null;
+  /** @nullable */
+  totalPoints?: number | null;
+}
+
+export type ChallengeProgressCompletionsItem = {
+  challengeId: number;
+  completedAt: string;
+  pointsEarned: number;
+};
+
+export interface ChallengeProgress {
+  totalPoints: number;
+  completedCount: number;
+  totalChallenges: number;
+  rank: string;
+  completions: ChallengeProgressCompletionsItem[];
+}
+
 export type ListProductsParams = {
 search?: string;
 category?: string;

@@ -14,6 +14,7 @@ import apiKeysRouter from "./apiKeys";
 import auditLogsRouter from "./auditLogs";
 import analyticsRouter from "./analytics";
 import scannerRouter from "./scanner";
+import challengesRouter from "./challenges";
 
 const router: IRouter = Router();
 
@@ -32,5 +33,6 @@ router.use(apiKeysRouter);
 router.use(auditLogsRouter);
 router.use(analyticsRouter);
 router.use(scannerRouter);
+router.use(challengesRouter);
 
 export default router;

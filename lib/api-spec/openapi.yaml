@@ -38,6 +38,8 @@ tags:
     description: Audit logs
   - name: scanner
     description: Security scanner and findings
+  - name: challenges
+    description: Training challenges and flag submission
 
 paths:
   /healthz:
@@ -802,6 +804,79 @@ paths:
       responses:
         "204":
           description: Deleted
+
+  # CHALLENGES
+  /challenges:
+    get:
+      operationId: listChallenges
+      tags: [challenges]
+      summary: List all training challenges
+      responses:
+        "200":
+          description: Challenges with user completion status
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Challenge"
+
+  /challenges/{id}:
+    get:
+      operationId: getChallenge
+      tags: [challenges]
+      summary: Get a single challenge with hints and objectives
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Challenge detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeDetail"
+
+  /challenges/{id}/submit:
+    post:
+      operationId: submitFlag
+      tags: [challenges]
+      summary: Submit a flag answer for a challenge
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FlagSubmission"
+      responses:
+        "200":
+          description: Submission result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlagSubmitResult"
+
+  /challenges/progress/me:
+    get:
+      operationId: getMyProgress
+      tags: [challenges]
+      summary: Get current user's challenge progress summary
+      responses:
+        "200":
+          description: Progress summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChallengeProgress"
 
   # SECURITY SCANNER / FINDINGS
   /findings:
@@ -1644,6 +1719,120 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/OwaspCoverageItem"
+
+    Challenge:
+      type: object
+      required: [id, title, category, difficulty, points, description, completed, solvedCount]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        difficulty:
+          type: string
+        points:
+          type: integer
+        description:
+          type: string
+        completed:
+          type: boolean
+        completedAt:
+          type: ["string", "null"]
+        solvedCount:
+          type: integer
+        totalAttempts:
+          type: integer
+
+    ChallengeDetail:
+      type: object
+      required: [id, title, category, difficulty, points, description, objectives, hints, completed, solvedCount]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        difficulty:
+          type: string
+        points:
+          type: integer
+        description:
+          type: string
+        objectives:
+          type: array
+          items:
+            type: string
+        hints:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChallengeHint"
+        completed:
+          type: boolean
+        completedAt:
+          type: ["string", "null"]
+        solvedCount:
+          type: integer
+        totalAttempts:
+          type: integer
+
+    ChallengeHint:
+      type: object
+      required: [order, text, penaltyPoints]
+      properties:
+        order:
+          type: integer
+        text:
+          type: string
+        penaltyPoints:
+          type: integer
+
+    FlagSubmission:
+      type: object
+      required: [flag]
+      properties:
+        flag:
+          type: string
+
+    FlagSubmitResult:
+      type: object
+      required: [correct, message]
+      properties:
+        correct:
+          type: boolean
+        message:
+          type: string
+        pointsEarned:
+          type: ["integer", "null"]
+        totalPoints:
+          type: ["integer", "null"]
+
+    ChallengeProgress:
+      type: object
+      required: [totalPoints, completedCount, totalChallenges, rank, completions]
+      properties:
+        totalPoints:
+          type: integer
+        completedCount:
+          type: integer
+        totalChallenges:
+          type: integer
+        rank:
+          type: string
+        completions:
+          type: array
+          items:
+            type: object
+            required: [challengeId, completedAt, pointsEarned]
+            properties:
+              challengeId:
+                type: integer
+              completedAt:
+                type: string
+              pointsEarned:
+                type: integer
 
     OwaspCoverageItem:
       type: object

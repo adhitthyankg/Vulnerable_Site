@@ -26,6 +26,9 @@ import type {
   ApiKeyInput,
   AuditLog,
   AuthResponse,
+  Challenge,
+  ChallengeDetail,
+  ChallengeProgress,
   Comment,
   CommentInput,
   Employee,
@@ -34,6 +37,8 @@ import type {
   Finding,
   FindingInput,
   FindingUpdate,
+  FlagSubmission,
+  FlagSubmitResult,
   HealthStatus,
   ListAuditLogsParams,
   ListCommentsParams,
@@ -3193,6 +3198,309 @@ export const useDeleteApiKey = <TError = ErrorType<unknown>,
       > => {
       return useMutation(getDeleteApiKeyMutationOptions(options));
     }
+
+export const getListChallengesUrl = () => {
+
+
+
+
+  return `/api/challenges`
+}
+
+/**
+ * @summary List all training challenges
+ */
+export const listChallenges = async ( options?: RequestInit): Promise<Challenge[]> => {
+
+  return customFetch<Challenge[]>(getListChallengesUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListChallengesQueryKey = () => {
+    return [
+    `/api/challenges`
+    ] as const;
+    }
+
+
+export const getListChallengesQueryOptions = <TData = Awaited<ReturnType<typeof listChallenges>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listChallenges>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListChallengesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listChallenges>>> = ({ signal }) => listChallenges({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listChallenges>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListChallengesQueryResult = NonNullable<Awaited<ReturnType<typeof listChallenges>>>
+export type ListChallengesQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all training challenges
+ */
+
+export function useListChallenges<TData = Awaited<ReturnType<typeof listChallenges>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listChallenges>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListChallengesQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getGetChallengeUrl = (id: number,) => {
+
+
+
+
+  return `/api/challenges/${id}`
+}
+
+/**
+ * @summary Get a single challenge with hints and objectives
+ */
+export const getChallenge = async (id: number, options?: RequestInit): Promise<ChallengeDetail> => {
+
+  return customFetch<ChallengeDetail>(getGetChallengeUrl(id),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetChallengeQueryKey = (id: number,) => {
+    return [
+    `/api/challenges/${id}`
+    ] as const;
+    }
+
+
+export const getGetChallengeQueryOptions = <TData = Awaited<ReturnType<typeof getChallenge>>, TError = ErrorType<unknown>>(id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getChallenge>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetChallengeQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getChallenge>>> = ({ signal }) => getChallenge(id, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getChallenge>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetChallengeQueryResult = NonNullable<Awaited<ReturnType<typeof getChallenge>>>
+export type GetChallengeQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get a single challenge with hints and objectives
+ */
+
+export function useGetChallenge<TData = Awaited<ReturnType<typeof getChallenge>>, TError = ErrorType<unknown>>(
+ id: number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getChallenge>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetChallengeQueryOptions(id,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getSubmitFlagUrl = (id: number,) => {
+
+
+
+
+  return `/api/challenges/${id}/submit`
+}
+
+/**
+ * @summary Submit a flag answer for a challenge
+ */
+export const submitFlag = async (id: number,
+    flagSubmission: FlagSubmission, options?: RequestInit): Promise<FlagSubmitResult> => {
+
+  return customFetch<FlagSubmitResult>(getSubmitFlagUrl(id),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      flagSubmission,)
+  }
+);}
+
+
+
+
+export const getSubmitFlagMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitFlag>>, TError,{id: number;data: BodyType<FlagSubmission>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof submitFlag>>, TError,{id: number;data: BodyType<FlagSubmission>}, TContext> => {
+
+const mutationKey = ['submitFlag'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitFlag>>, {id: number;data: BodyType<FlagSubmission>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  submitFlag(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SubmitFlagMutationResult = NonNullable<Awaited<ReturnType<typeof submitFlag>>>
+    export type SubmitFlagMutationBody = BodyType<FlagSubmission>
+    export type SubmitFlagMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Submit a flag answer for a challenge
+ */
+export const useSubmitFlag = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitFlag>>, TError,{id: number;data: BodyType<FlagSubmission>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof submitFlag>>,
+        TError,
+        {id: number;data: BodyType<FlagSubmission>},
+        TContext
+      > => {
+      return useMutation(getSubmitFlagMutationOptions(options));
+    }
+
+export const getGetMyProgressUrl = () => {
+
+
+
+
+  return `/api/challenges/progress/me`
+}
+
+/**
+ * @summary Get current user's challenge progress summary
+ */
+export const getMyProgress = async ( options?: RequestInit): Promise<ChallengeProgress> => {
+
+  return customFetch<ChallengeProgress>(getGetMyProgressUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetMyProgressQueryKey = () => {
+    return [
+    `/api/challenges/progress/me`
+    ] as const;
+    }
+
+
+export const getGetMyProgressQueryOptions = <TData = Awaited<ReturnType<typeof getMyProgress>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMyProgress>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMyProgressQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyProgress>>> = ({ signal }) => getMyProgress({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMyProgress>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetMyProgressQueryResult = NonNullable<Awaited<ReturnType<typeof getMyProgress>>>
+export type GetMyProgressQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get current user's challenge progress summary
+ */
+
+export function useGetMyProgress<TData = Awaited<ReturnType<typeof getMyProgress>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getMyProgress>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetMyProgressQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
 
 export const getListFindingsUrl = (params?: ListFindingsParams,) => {
   const normalizedParams = new URLSearchParams();
