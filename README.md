@@ -24,6 +24,7 @@ A hands-on cybersecurity training lab modeled after OWASP Juice Shop / DVWA. Stu
 
 ### 1. Start PostgreSQL
 
+Run the PostgreSQL 16 container:
 ```bash
 docker run -d --name cyberlab-pg \
   -e POSTGRES_PASSWORD=postgres \
@@ -31,64 +32,119 @@ docker run -d --name cyberlab-pg \
   -p 5432:5432 postgres:16
 ```
 
-To verify it's running:
+To verify it is running:
 ```bash
 docker ps --filter name=cyberlab-pg
 ```
 
-### 2. Install dependencies
+---
 
+### 2. Environment Setup (Windows Platform Considerations)
+
+If you are running on **Windows**, ensure that your Node.js, pnpm, and Git binaries are visible in your terminal session's `PATH`. The project's root `preinstall` script relies on a POSIX shell (`sh`), which requires Git's shell binaries.
+
+In **PowerShell**, configure your environment variables before proceeding:
+```powershell
+# Adjust path variables (verify paths match your local installation)
+$env:PATH = "C:\Program Files\nodejs;C:\Users\$env:USERNAME\AppData\Roaming\npm;C:\Program Files\Git\usr\bin;" + $env:PATH
+```
+
+Additionally, the project has commented out `win32` platform overrides in [pnpm-workspace.yaml](file:///e:/Vuln%20site/pnpm-workspace.yaml) to ensure native Windows dependencies (like `esbuild`, `@tailwindcss/oxide`, etc.) are downloaded correctly.
+
+---
+
+### 3. Install dependencies
+
+Run the following installation command:
+
+**Linux / macOS**:
 ```bash
-cd Safe-Phrasing
 pnpm install
 ```
 
-> **Note:** This project enforces pnpm — if you run `npm install` or `yarn`, it will fail with a clear error.
-
-### 3. Push database schema
-
-```bash
-export DATABASE_URL="postgres://postgres:postgres@localhost:5432/cyberlab"
-pnpm --filter @workspace/db exec drizzle-kit push --config ./drizzle.config.ts
+**Windows (PowerShell)**:
+To bypass the Linux-specific shell validation and successfully fetch Windows platform binaries:
+```powershell
+pnpm install --no-frozen-lockfile --ignore-scripts
 ```
 
-You should see something like: `✔ Applied migrations` (14 tables will be created).
+> **Note:** This project enforces pnpm — if you run `npm install` or `yarn`, the installation will fail.
 
-### 4. Seed demo data
+---
+
+### 4. Push database schema
+
+Apply the Drizzle ORM schema to the Postgres database:
+
+**Linux / macOS**:
+```bash
+export DATABASE_URL="postgres://postgres:postgres@localhost:5432/cyberlab"
+pnpm --filter @workspace/db run push
+```
+
+**Windows (PowerShell)**:
+```powershell
+$env:DATABASE_URL="postgres://postgres:postgres@localhost:5432/cyberlab"
+pnpm --filter @workspace/db run push
+```
+
+You should see: `✔ Changes applied` (14 tables created).
+
+---
+
+### 5. Seed demo data
+
+Populate the database with sample users, products, orders, posts, challenges, and training data:
 
 ```bash
+# Ensure DATABASE_URL is set in your session
 pnpm --filter @workspace/scripts run seed
 ```
 
-This populates the database with sample users, products, orders, posts, challenges, and other training data.
+---
 
-### 5. Start the API server (port 8080)
+### 6. Start the API server (port 8080)
 
 In **Terminal 1**:
 
+**Linux / macOS**:
 ```bash
 export DATABASE_URL="postgres://postgres:postgres@localhost:5432/cyberlab"
 export PORT=8080
 pnpm --filter @workspace/api-server run dev
 ```
 
-The `dev` script builds the server with esbuild then starts it. You should see:
-```
-[info] Server listening  {"port": 8080}
-```
-
-Verify the API is up:
-```bash
-curl http://localhost:8080/api/health
+**Windows (PowerShell)**:
+```powershell
+$env:DATABASE_URL="postgres://postgres:postgres@localhost:5432/cyberlab"
+$env:PORT=8080
+pnpm --filter @workspace/api-server run dev
 ```
 
-### 6. Start the frontend (port 5173)
+Verify that the server has started (it will compile with esbuild and then listen):
+`[info] Server listening {"port": 8080}`
+
+Verify the API is reachable:
+* **Linux / macOS**: `curl http://localhost:8080/api/healthz`
+* **Windows (PowerShell)**: `Invoke-RestMethod -Uri http://localhost:8080/api/healthz`
+
+---
+
+### 7. Start the frontend (port 5173)
 
 In **Terminal 2**:
 
+**Linux / macOS**:
 ```bash
 export PORT=5173
 export BASE_PATH=/
+pnpm --filter @workspace/cyberlab run dev
+```
+
+**Windows (PowerShell)**:
+```powershell
+$env:PORT=5173
+$env:BASE_PATH="/"
 pnpm --filter @workspace/cyberlab run dev
 ```
 

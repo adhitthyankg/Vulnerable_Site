@@ -35,7 +35,8 @@ router.post("/auth/login", async (req, res): Promise<void> => {
     return;
   }
 
-  const { username, password } = parsed.data;
+  const username = parsed.data.username.trim();
+  const password = parsed.data.password.trim();
 
   // EDUCATIONAL NOTE: This query is intentionally written to be inspectable.
   // In a vulnerable version, string interpolation here would allow SQL injection.
